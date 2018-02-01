@@ -1,1 +1,8 @@
-show.erb
+<h1><%=@pet.name%></h1>
+<p><label for="owner">Owner: </label> <%=@pet.owner.name%></p>
+
+<!--DELETE BUTTON-->
+<form action="/pets/<%= @pet.id %>/delete" method="post">
+  <input id="hidden" type="hidden" name="_method" value="delete">
+  <input type="submit" value="delete">
+</form>

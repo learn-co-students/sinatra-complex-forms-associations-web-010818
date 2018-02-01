@@ -1,13 +1,14 @@
 class PetsController < ApplicationController
 
+  ##READ
   get '/pets' do
     @pets = Pet.all
     erb :'/pets/index'
   end
 
+  ##NEW
   get '/pets/new' do
     @owners = Owner.all
-
     erb :'/pets/new'
   end
 
@@ -23,18 +24,33 @@ class PetsController < ApplicationController
     redirect to "pets/#{@pet.id}"
   end
 
+  ##UPDATE
+  get '/pets/:id/edit' do
+    @pet = Pet.find(params[:id])
+    @owners = Owner.all
+    erb :'/pets/edit'
+  end
+
+  post '/pets/:id' do
+    @pet = Pet.find(params[:id])
+    @pet.update(name: params["pet"]["name"])
+
+    ## Now update owner
+    if !params["owner"]["name"].empty? ## New Owner specified
+      @owner = Owner.create(params["owner"])
+    else ## Existing owner specified
+      @owner = Owner.find(params["pet"]["owner_id"].to_i)
+    end
+
+    @owner.pets << @pet
+
+    redirect to "pets/#{@pet.id}"
+  end
+
+  ##DELETE
   get '/pets/:id' do
     @pet = Pet.find(params[:id])
     erb :'/pets/show'
   end
 
-  post '/pets/:id' do
-    @pet = Pet.find(params[:id])
-    @pet.update(params["pet"])
-    if !params["owner"]["name"].empty?
-      @owner.pets << Pet.create(name: params["pet"]["name"])
-    end
-
-    redirect to "pets/#{@pet.id}"
-  end
 end

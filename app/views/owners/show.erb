@@ -5,3 +5,9 @@
   <li><%=pet.name%></li>
   <%end%>
 </ul>
+
+<!--DELETE BUTTON-->
+<form action="/owners/<%= @owner.id %>/delete" method="post">
+  <input id="hidden" type="hidden" name="_method" value="delete">
+  <input type="submit" value="delete">
+</form>
